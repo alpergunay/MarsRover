@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Hb.MarsRover.Exceptions;
 
 namespace Hb.MarsRover.Domain
 {
@@ -20,7 +21,7 @@ namespace Hb.MarsRover.Domain
         public void Move()
         {
             if(!CanRoverMove())
-                throw new Exception("Rover cannot move to outside of the Plateau");
+                throw new RoverException("Rover cannot move to outside of the Plateau");
 
             switch (CurrentDirection)
             {
@@ -37,7 +38,7 @@ namespace Hb.MarsRover.Domain
                     this.CurrentCoordinate.YCoordinate--;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new RoverException("Invalid Direction");
             }
         }
 
@@ -57,7 +58,7 @@ namespace Hb.MarsRover.Domain
             }
             else
             {
-                throw new Exception($"Invalid Command. Command Type {command.Description}");
+                throw new RoverException($"Invalid Command. Command Type {command.Description}");
             }
         }
 
@@ -106,18 +107,17 @@ namespace Hb.MarsRover.Domain
                 case Direction.N when CurrentCoordinate.YCoordinate + 1 > Plateau.Coordinate.YCoordinate:
                 case Direction.W when CurrentCoordinate.XCoordinate - 1 < 0:
                 case Direction.S when CurrentCoordinate.YCoordinate - 1 < 0:
-                case Direction.E when CurrentCoordinate.XCoordinate + 1 > Plateau.Coordinate.YCoordinate:
+                case Direction.E when CurrentCoordinate.XCoordinate + 1 > Plateau.Coordinate.XCoordinate:
                     return false;
                 default:
                     return true;
             }
         }
-
         public void ProcessInstructions(string instruction)
         {
             foreach (var c in instruction)
             {
-                ProcessCommand(c.ToMotionType());
+                ProcessCommand(c.ToCommand());
             }
         }
         public string DisplayPosition()

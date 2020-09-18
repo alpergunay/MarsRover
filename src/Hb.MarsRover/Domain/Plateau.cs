@@ -1,4 +1,6 @@
-﻿namespace Hb.MarsRover.Domain
+﻿using Hb.MarsRover.Exceptions;
+
+namespace Hb.MarsRover.Domain
 {
     public class Plateau
     {
@@ -6,6 +8,9 @@
 
         public Plateau(Coordinate coordinate)
         {
+            if (coordinate == null || coordinate.XCoordinate <= 0 || coordinate.YCoordinate <= 0)
+                throw new PlateauException("Invalid Coordinates");
+
             Coordinate = coordinate;
         }
         public override string ToString()

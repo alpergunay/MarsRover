@@ -7,7 +7,7 @@ namespace Hb.MarsRover
 {
     public static class Extension
     {
-        public static Command ToMotionType(this char c)
+        public static Command ToCommand(this char c)
         {
             switch (c)
             {
